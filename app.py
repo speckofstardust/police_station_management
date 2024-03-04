@@ -9,33 +9,31 @@ app = Flask(__name__)
 
 
 @app.route('/',methods=['GET', 'POST'])
-def renderLoginPage():
-    events = runQuery("SELECT * FROM events")
-    branch =  runQuery("SELECT * FROM branch")
+@app.route('/submit_complaint', methods=['POST'])
+def submitComplaint():
     if request.method == 'POST':
-        Name = request.form['FirstName'] + " " + request.form['LastName']
-        Mobile = request.form['MobileNumber']
-        Branch_id = request.form['Branch']
-        Event = request.form['Event']
-        Email = request.form['Email']
+        station_id = request.form['StationID']
+        filed_by = request.form['FiledBy']
+        phone_no = request.form['PhoneNumber']
+        descpt = request.form['Description']
 
-        if len(Mobile) != 10:
-            return render_template('loginfail.html',errors = ["Invalid Mobile Number!"])
+        # Assuming date_filed is today's date
+        # You can modify this according to your requirements
+        date_filed = datetime.now().date()
 
-        if Email[-4:] != '.com':
-            return render_template('loginfail.html', errors = ["Invalid Email!"])
+        # Assuming status is initially 'Pending'
+        # You can modify this according to your requirements
+        status = 'Pending'
 
-        if len(runQuery("SELECT * FROM participants WHERE event_id={} AND mobile={}".format(Event,Mobile))) > 0 :
-            return render_template('loginfail.html', errors = ["Student already Registered for the Event!"])
+        # Check if phone number is valid
+        if len(phone_no) != 10:
+            return render_template('complaint_fail.html', errors=["Invalid Phone Number!"])
 
-        if runQuery("SELECT COUNT(*) FROM participants WHERE event_id={}".format(Event)) >= runQuery("SELECT participants FROM events WHERE event_id={}".format(Event)):
-            return render_template('loginfail.html', errors = ["Participants count fullfilled Already!"])
+        # Insert the complaint into the database
+        runQuery("INSERT INTO Complaint (station_id, date_filed, filed_by, phone_no, descpt, status) VALUES ('{}', '{}', '{}', '{}', '{}', '{}');".format(station_id, date_filed, filed_by, phone_no, descpt, status))
 
-        runQuery("INSERT INTO participants(event_id,fullname,email,mobile,college,branch_id) VALUES({},\"{}\",\"{}\",\"{}\",\"COEP\",\"{}\");".format(Event,Name,Email,Mobile,Branch_id))
+        return render_template('complaint_success.html', message="Complaint successfully submitted!")
 
-        return render_template('index.html',events = events,branchs = branch,errors=["Succesfully Registered!"])
-
-    return render_template('index.html',events = events,branchs = branch)
     
 
 
@@ -113,7 +111,7 @@ def renderParticipants():
 def runQuery(query):
 
     try:
-        db = mysql.connector.connect( host='localhost',database='police_station_db',user='root',password='asdafasdf')
+        db = mysql.connector.connect( host='QWERTY07',database='police_station_db',user='root',password='T00thless:p')
 
         if db.is_connected():
             print("Connected to MySQL, running query: ", query)

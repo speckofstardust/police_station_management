@@ -6,6 +6,37 @@ from random import randint
 
 
 app = Flask(__name__)
+def runQuery(query):
+    try:
+        # Establish a connection to MySQL server
+        db = mysql.connector.connect(
+            host='QWERTY07',
+            user='root',
+            password='T00thless:p',
+            database='police_station_db'
+        )
+
+        # Create a cursor object to execute SQL queries
+        cursor = db.cursor()
+
+        # Execute the provided query
+        cursor.execute(query)
+
+        # Fetch all results from the executed query
+        res = cursor.fetchall()
+
+        # Commit the transaction
+        db.commit()
+
+        # Close the cursor and connection
+        cursor.close()
+        db.close()
+
+        return res
+
+    except Exception as e:
+        print("Error:", e)
+        return None
 
 
 @app.route('/',methods=['GET', 'POST'])
@@ -16,13 +47,11 @@ def submitComplaint():
         filed_by = request.form['FiledBy']
         phone_no = request.form['PhoneNumber']
         descpt = request.form['Description']
-
-        # Assuming date_filed is today's date
-        # You can modify this according to your requirements
-        date_filed = datetime.now().date()
+        date_filed = request.form['DateFiled']
+    
+        #date_filed = datetime.now().date()
 
         # Assuming status is initially 'Pending'
-        # You can modify this according to your requirements
         status = 'Pending'
 
         # Check if phone number is valid

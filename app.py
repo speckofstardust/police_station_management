@@ -59,7 +59,7 @@ def renderAdmin():
         UN = request.form['username']
         PS = request.form['password']
 
-        cred = runQuery("SELECT Emp_id, password FROM Employee")
+        cred = runQuery("SELECT Emp_id, password FROM Employee WHERE rank_id!='Constable' AND rank_id!='Head Constable'")
         #print(cred)
         for user in cred:
             if UN==user[0] and PS==user[1]:
@@ -72,15 +72,22 @@ def renderAdmin():
 
 
 @app.route('/dashboard',methods=['GET','POST'])
-def getEvents():
+def displayComplaints():
     complaints = runQuery('SELECT * FROM COMPLAINT')
     print(complaints)
+
+    if request.method == 'GET':
+        return render_template("dashboard.html", complaints = complaints)
     
+@app.route('/employee', methods=['GET','POST'])
+def displayEmployee():
+    employee = runQuery('SELECT emp_id, name, rank_id, station_id, date_of_join FROM EMPLOYEE GROUP BY rank_id')
+    print(employee)
 
     if request.method == "POST":
         try:
 
-            Name = request.form["newEvent"]
+            Name = request.form["newEmployee"]
             fee=request.form["Fee"]
             participants = request.form["maxP"]
             Type=request.form["EventType"]

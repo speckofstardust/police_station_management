@@ -33,17 +33,21 @@
         <table class="table">
             <thead class="thead-dark bg-dark text-light">
                 <tr>
-                    <th scope="col">Event ID</th>
-                    <th scope="col">Event</th>
-                    <th scope="col">Total participants</th>
+                    <th scope="col">Emp ID</th>
+                    <th scope="col">Emp Name</th>
+                    <th scope="col">Rank</th>
+                    <th scope="col">Station ID</th>
+                    <th scope="col">Start Date</th>
                 </tr>
             </thead>
             <tbody>
-                {% for eve in events %}
+                {% for emp in employee %}
                 <tr>
-                    <th scope="row">{{eve[0]}}</th>
-                    <td>{{eve[1]}}</td>
-                    <td>{{eve[2]}}</td>
+                    <th scope="row">{{emp[0]}}</th>
+                    <td>{{emp[1]}}</td>
+                    <td>{{emp[2]}}</td>
+                    <td>{{emp[3]}}</td>
+                    <td>{{emp[4]}}</td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -52,12 +56,17 @@
         <div class="row" style="align-items: center;display: flex; justify-content: center;">
             <div class="col-md-3" > 
                 <button id="addbtn" type="button" class="mb-5 btn btn-primary btn-lg" >
-                    + Add new Event
+                    + Add new employee
                 </button>
             </div>
+            <!--<div class="col-md-3">
+                <button id="updbtn" type="button" class="mb-5 btn btn-secondary btn-lg">
+                    Update employee
+                </button>
+            </div>-->
             <div class="col-md-6"id="deldiv" >
                 <button id="delbtn" type="button" class="mb-5 btn btn-danger btn-lg">
-                    Delete Event
+                    Delete employee
                 </button>
             </div>
         </div>
@@ -68,11 +77,11 @@
             <form method="post" style="width:45vw;min-height:20vw;">
                 <div class="form-group rounded" style="text-align:center;">
                     <label style="margin-top:4%;margin-bottom:5%;;font-style:Trebuchet MS;color:antiquewhite" class="h2"
-                        for="inlineFormCustomSelect">Delete Event </label>
+                        for="inlineFormCustomSelect">Delete Employee</label>
                     <select name="EventId" class="form-control w-100 border border-dark">
-                        <option selected>Select Event to Delete</option>
-                        {% for event in events %}
-                        <option value="{{event[0]}}">{{event[1]}}</option>
+                        <option selected>Select Employee to Delete</option>
+                        {% for emp in employee %}
+                        <option value="{{emp[0]}}">{{emp[1]}}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -90,7 +99,7 @@
             </div>
             <div class="border border-dark">
                 <div style="border-radius:12px;position:relative;" class="w3-container ">
-                    <h2 style="font-weight:bold;text-align:center;"> Event Addition form </h2>
+                    <h2 style="font-weight:bold;text-align:center;">Add an Employee</h2>
                 </div>
                 <form class="" method="post">
                     <div class="row bg-dark text-light">
@@ -101,29 +110,29 @@
                                     <div class="col-md-1"></div>
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <label class="h4" for="inlineFormCustomSelect">Add new Event</label>
-                                            <input name="newEvent" type="text" class="form-control border border-dark"
-                                                id="eventname" aria-describedby="eventname"
-                                                placeholder="Enter Event Name">
+                                            <label class="h4" for="inlineFormCustomSelect">Emp ID</label>
+                                            <input name="emp_id" type="text" class="form-control border border-dark"
+                                                id="emp_id" aria-describedby="emp_id"
+                                                placeholder="Enter employee ID">
                                             <br />
+                                            <div class="form-group">
+                                                <label class="h4" for="inlineFormCustomSelect">Emp Name</label>
+                                                <input name="Name" type="text" class="form-control border border-dark"
+                                                    id="Fee" aria-describedby="Fee"
+                                                    placeholder="Enter employee name">
+                                                <br />
+                                            </div>
                                             <div class="form-group rounded">
-                                                <label class="h4" for="inlineFormCustomSelect">Event Type</label>
-                                                <select name="EventType" class="form-control w-100 border border-dark"
-                                                    id="EventType">
-                                                    <option selected>Select Event Type</option>
-                                                    {% for type in types %}
-                                                    <option value={{type[0]}}>{{type[1]}}</option>
+                                                <label class="h4" for="inlineFormCustomSelect">Rank</label>
+                                                <select name="RankType" class="form-control w-100 border border-dark"
+                                                    id="RankType">
+                                                    <option selected>Select Rank</option>
+                                                    {% for rank_id in ranks%}
+                                                    <option value={{rank_id[0]}}>{{rank_id[1]}}</option>
                                                     {% endfor %}
                                                 </select>
                                             </div>
                                             <br />
-                                            <div class="form-group">
-                                                <label class="h4" for="inlineFormCustomSelect">Registration Fee</label>
-                                                <input name="Fee" type="number" class="form-control border border-dark"
-                                                    id="Fee" aria-describedby="Fee"
-                                                    placeholder="Enter registration fee">
-                                                <br />
-                                            </div>
                                         </div>
                                         <br />
                                     </div>
@@ -131,26 +140,22 @@
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <label class="h4" for="inlineFormCustomSelect">Max participants</label>
-                                            <input name="maxP" type="number" class="form-control border border-dark"
-                                                id="maxparticipants" aria-describedby="maxparticipants"
-                                                placeholder="Enter maximum participants">
+                                            <label class="h4" for="inlineFormCustomSelect">Start Date</label>
+                                            <input name="startdate" type="number" class="form-control border border-dark"
+                                                id="startdate" aria-describedby="startdate"
+                                                placeholder="Enter date in YYYY-MM-DD">
                                             <br />
                                             <div class="form-group rounded">
-                                                <label class="h4" for="inlineFormCustomSelect">Event Location</label>
-                                                <select name="EventLocation"
-                                                    class="form-control w-100 border border-dark" id="EventLocation">
-                                                    <option selected>Select Location</option>
-                                                    {% for location in locations %}
-                                                    <option value={{location[0]}}>{{location[1]}}</option>
+                                                <label class="h4" for="inlineFormCustomSelect">Station</label>
+                                                <select name="Station"
+                                                    class="form-control w-100 border border-dark" id="Station">
+                                                    <option selected>Select Station</option>
+                                                    {% for station_name in station %}
+                                                    <option value={{station_name[0]}}>{{station_name[1]}}</option>
                                                     {% endfor %}
                                                 </select>
                                             </div>
                                             <br />
-                                            <label class="h4" for="inlineFormCustomSelect">Enter
-                                                date(YYYY-MM-DD)</label>
-                                            <input name="Date" type="text" class="form-control border border-dark"
-                                                id="date" aria-describedby="date" placeholder="Enter Date">
                                         </div>
                                     </div>
                                     <br>

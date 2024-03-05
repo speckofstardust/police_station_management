@@ -77,18 +77,18 @@
             <form method="post" style="width:45vw;min-height:20vw;">
                 <div class="form-group rounded" style="text-align:center;">
                     <label style="margin-top:4%;margin-bottom:5%;;font-style:Trebuchet MS;color:antiquewhite" class="h2"
-                        for="inlineFormCustomSelect">Delete Employee</label>
-                    <select name="EventId" class="form-control w-100 border border-dark">
-                        <option selected>Select Employee to Delete</option>
-                        {% for emp in employee %}
-                        <option value="{{emp[0]}}">{{emp[1]}}</option>
+                        for="inlineFormCustomSelect">Update Complaint Status</label>
+                    <select name="comp_id" class="form-control w-100 border border-dark">
+                        <option selected>Enter the Complaint ID</option>
+                        {% for comp in complaint_ids %}
+                        <option value="{{comp[0]}}">{{comp[0]}}</option>
                         {% endfor %}
                     </select>
                 </div>
                 <div style="margin-top:3%;align-items: center;display:flex;justify-content:center;">
                     <button style="width:20%;margin-top:2%;margin-bottom:5%;align-items: center;display: flex; justify-content: center;font-weight:bolder;"
                         type="submit" class="btn btn-primary border border-dark">
-                        Delete
+                        Update
                     </button>
                 </div>
             </form>

@@ -74,10 +74,16 @@ def renderAdmin():
 @app.route('/dashboard/complaint',methods=['GET','POST'])
 def displayComplaints():
     complaints = runQuery('SELECT * FROM COMPLAINT')
-    print(complaints)
+    complaint_ids = runQuery("SELECT comp_id FROM Complaint WHERE Status='Pending'")
+    print(complaint_ids)
 
     if request.method == 'GET':
-        return render_template("dashboard.html", complaints = complaints)
+        return render_template("complaint_display.html", complaints = complaints, complaint_ids = complaint_ids)
+    if request.method == 'POST':
+        comp_id = request.form['comp_id']
+        complaints = runQuery("UPDATE Complaint SET Status='Completed' WHERE comp_id = '{}' ".format(comp_id))
+        return render_template("comp_update_successful.html")
+
     
 @app.route('/dashboard/employee', methods=['GET','POST'])
 def displayEmployee():

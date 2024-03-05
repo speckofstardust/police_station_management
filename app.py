@@ -8,7 +8,7 @@ from werkzeug.exceptions import BadRequestKeyError
 
 app = Flask(__name__)
 
-@app.route('/',methods=['GET', 'POST'])
+@app.route('/complaint',methods=['GET', 'POST'])
 #@app.route('/complaint', methods=['POST'])
 def submitComplaint():
     station = runQuery("SELECT station_name FROM station")
@@ -60,9 +60,10 @@ def renderAdmin():
         PS = request.form['password']
 
         cred = runQuery("SELECT Emp_id, password FROM Employee")
+        #print(cred)
         for user in cred:
             if UN==user[0] and PS==user[1]:
-                return redirect('/eventType')
+                return redirect('/dashboard')
 
         return render_template('admin.html',errors=["Wrong Username/Password"])
 
@@ -70,16 +71,11 @@ def renderAdmin():
 
 
 
-@app.route('/eventType',methods=['GET','POST'])
+@app.route('/dashboard',methods=['GET','POST'])
 def getEvents():
-    eventTypes = runQuery("SELECT *,(SELECT COUNT(*) FROM participants AS P WHERE T.type_id IN (SELECT type_id FROM events AS E WHERE E.event_id = P.event_id ) ) AS COUNT FROM event_type AS T;") 
-
-    events = runQuery("SELECT event_id,event_title,(SELECT COUNT(*) FROM participants AS P WHERE P.event_id = E.event_id ) AS count FROM events AS E;")
-
-    types = runQuery("SELECT * FROM event_type;")
-
-    location = runQuery("SELECT * FROM location;")
-
+    complaints = runQuery('SELECT * FROM COMPLAINT')
+    print(complaints)
+    
 
     if request.method == "POST":
         try:

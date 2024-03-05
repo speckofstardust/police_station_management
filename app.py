@@ -1,69 +1,51 @@
 import mysql.connector,sys
 import datetime
 from mysql.connector import Error
-from flask import Flask, request, jsonify, render_template,redirect, url_for
+from flask import Flask, request, jsonify, render_template, redirect, url_for
 from random import randint
+from werkzeug.exceptions import BadRequestKeyError
 
 
 app = Flask(__name__)
-def runQuery(query):
-    try:
-        # Establish a connection to MySQL server
-        db = mysql.connector.connect(
-            host='QWERTY07',
-            user='root',
-            password='T00thless:p',
-            database='police_station_db'
-        )
-
-        # Create a cursor object to execute SQL queries
-        cursor = db.cursor()
-
-        # Execute the provided query
-        cursor.execute(query)
-
-        # Fetch all results from the executed query
-        res = cursor.fetchall()
-
-        # Commit the transaction
-        db.commit()
-
-        # Close the cursor and connection
-        cursor.close()
-        db.close()
-
-        return res
-
-    except Exception as e:
-        print("Error:", e)
-        return None
-
 
 @app.route('/',methods=['GET', 'POST'])
-@app.route('/submit_complaint', methods=['POST'])
+#@app.route('/complaint', methods=['POST'])
 def submitComplaint():
-    if request.method == 'POST':
-        station_id = request.form['StationID']
-        filed_by = request.form['FiledBy']
-        phone_no = request.form['PhoneNumber']
-        descpt = request.form['Description']
-        date_filed = request.form['DateFiled']
-    
-        #date_filed = datetime.now().date()
+    station = runQuery("SELECT station_name FROM station")
+    complaint = runQuery("SELECT MAX(comp_id) FROM complaint")
 
+    if request.method == 'POST':
+        station_name = request.form['Station']
+        filed_by = request.form['Name']
+        phone_no = request.form['MobileNumber']
+        descpt = request.form['Descpt']
+        date_filed = request.form['Date']
+    
         # Assuming status is initially 'Pending'
         status = 'Pending'
 
         # Check if phone number is valid
         if len(phone_no) != 10:
-            return render_template('complaint_fail.html', errors=["Invalid Phone Number!"])
+            return render_template('complaint.html', station = station, errors=["Invalid Phone Number!"])
 
         # Insert the complaint into the database
-        runQuery("INSERT INTO Complaint (station_id, date_filed, filed_by, phone_no, descpt, status) VALUES ('{}', '{}', '{}', '{}', '{}', '{}');".format(station_id, date_filed, filed_by, phone_no, descpt, status))
+        id = int(complaint[0][0])+1
+        station_id_list = runQuery("SELECT station_id FROM station WHERE station_name='{}'".format(station_name))
+        station_id = station_id_list[0][0]
+        runQuery("INSERT INTO Complaint (comp_id, station_id, date_filed, filed_by, phone_no, descpt, status) VALUES ('{}', '{}', '{}', '{}', '{}', '{}', '{}')".format(id, station_id, date_filed, filed_by, phone_no, descpt, status))
 
-        return render_template('complaint_success.html', message="Complaint successfully submitted!")
+        # try:
+        #     bad_key = request.form['bad_key']
+        # except BadRequestKeyError as ex: 
+        #     return 'Unknown key: "{}"'.format(ex.args[0]), 500 
 
+        return render_template('comp_success.html')
     
+    return render_template('complaint.html', station = station)
+
+@app.route('/home', methods=['GET', 'POST'])
+def renderHome():
+    return render_template('home.html')
 
 
 @app.route('/loginfail',methods=['GET'])
@@ -77,8 +59,7 @@ def renderAdmin():
         UN = request.form['username']
         PS = request.form['password']
 
-        cred = runQuery("SELECT * FROM admin")
-        print(cred)
+        cred = runQuery("SELECT Emp_id, password FROM Employee")
         for user in cred:
             if UN==user[0] and PS==user[1]:
                 return redirect('/eventType')
@@ -97,7 +78,7 @@ def getEvents():
 
     types = runQuery("SELECT * FROM event_type;")
 
-    location = runQuery("SELECT * FROM location")
+    location = runQuery("SELECT * FROM location;")
 
 
     if request.method == "POST":
@@ -140,7 +121,7 @@ def renderParticipants():
 def runQuery(query):
 
     try:
-        db = mysql.connector.connect( host='QWERTY07',database='police_station_db',user='root',password='T00thless:p')
+        db = mysql.connector.connect( host='localhost',database='police_station_db',user='RecordKeeper',password='Vertin')
 
         if db.is_connected():
             print("Connected to MySQL, running query: ", query)
@@ -148,11 +129,13 @@ def runQuery(query):
             cursor.execute(query)
             db.commit()
             res = None
+
             try:
                 res = cursor.fetchall()
             except Exception as e:
                 print("Query returned nothing, ", e)
                 return []
+            
             return res
 
     except Exception as e:

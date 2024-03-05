@@ -116,8 +116,8 @@
                   id="inlineFormCustomSelect"
                 >
                   <option selected>Nearest Police Station</option>
-                  {% for station_name in Station %}
-                  <option value="{{station_name[0]}}">{{station_name[1]}}</option>
+                  {% for station_name in station %}
+                  <option value="{{station_name[0]}}">{{station_name[0]}}</option>
                   {% endfor %}
                 </select>
               </div>

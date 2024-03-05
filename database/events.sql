@@ -49,16 +49,16 @@ CREATE TABLE 'Visitor' (
 	CONSTRAINT 'pk_vis' PRIMARY KEY('vis_id'),
 	CONSTRAINT 'fk_vis' FOREIGN KEY('station_id') REFERENCES Station('station_id'));
 
-CREATE TABLE 'Complaint' (
-	'comp_id' VARCHAR(5),
-	'station_id' VARCHAR(5),
-	'date_filed' DATE,
-	'filed_by' VARCHAR(20),
-	'phone_no' NUMERIC(10,0),
-	'descpt' VARCHAR(50),
-	'status' VARCHAR(9),
-	CONSTRAINT 'pk_comp' PRIMARY KEY('comp_id'),
-	CONSTRAINT 'fk_comp' FOREIGN KEY('station_id') REFERENCES Station('station_id'));
+CREATE TABLE Complaint (
+	comp_id INTEGER,
+	station_id VARCHAR(5),
+	date_filed DATE,
+	filed_by VARCHAR(20),
+	phone_no NUMERIC(10,0),
+	descpt VARCHAR(50),
+	status VARCHAR(9),
+	CONSTRAINT pk_comp PRIMARY KEY(comp_id),
+	CONSTRAINT fk_comp FOREIGN KEY(station_id) REFERENCES Station(station_id));
 
 CREATE TABLE 'Fine_Info' (
 	'matter' VARCHAR(20),
@@ -108,10 +108,10 @@ INSERT INTO Visitor VALUES('V003', 'Mike Johnson', 'A1417', 'Inquiry', '2022-01-
 INSERT INTO Visitor VALUES('V004', 'Emily Brown', 'A1415', 'Appointment', '2022-01-04', '16:00:00', '17:00:00'); 
 INSERT INTO Visitor VALUES('V005', 'Alex Wilson', 'A1416', 'Complaint', '2022-01-05', '10:30:00', '11:30:00');
 
-INSERT INTO Complaint VALUES('C001', 'A1415', '2022-01-01', 'John Doe', 9428302313, 'Robbery', 'Pending'); 
-INSERT INTO Complaint VALUES('C002', 'A1416', '2022-01-02', 'Jane Smith', 9428302314, 'Fraud', 'Pending');
-INSERT INTO Complaint VALUES('C003', 'A1417', '2022-01-03', 'Mike Johnson', 9428302315, 'Assault', 'Pending');
-INSERT INTO Complaint VALUES('C004', 'A1415', '2022-01-04', 'Emily Brown', 9428302313, 'Theft', 'Pending');
+INSERT INTO Complaint VALUES(001, 'A1415', '2022-01-01', 'John Doe', 9428302313, 'Robbery', 'Pending'); 
+INSERT INTO Complaint VALUES(002, 'A1416', '2022-01-02', 'Jane Smith', 9428302314, 'Fraud', 'Pending');
+INSERT INTO Complaint VALUES(003, 'A1417', '2022-01-03', 'Mike Johnson', 9428302315, 'Assault', 'Pending');
+INSERT INTO Complaint VALUES(004, 'A1415', '2022-01-04', 'Emily Brown', 9428302313, 'Theft', 'Pending');
 
 -- --------------------------------------------------------------------------------------------------------
 

@@ -71,7 +71,7 @@ def renderAdmin():
 
 
 
-@app.route('/dashboard',methods=['GET','POST'])
+@app.route('/dashboard/complaint',methods=['GET','POST'])
 def displayComplaints():
     complaints = runQuery('SELECT * FROM COMPLAINT')
     print(complaints)
@@ -79,27 +79,32 @@ def displayComplaints():
     if request.method == 'GET':
         return render_template("dashboard.html", complaints = complaints)
     
-@app.route('/employee', methods=['GET','POST'])
+@app.route('/dashboard/employee', methods=['GET','POST'])
 def displayEmployee():
-    employee = runQuery('SELECT emp_id, name, rank_id, station_id, date_of_join FROM EMPLOYEE GROUP BY rank_id')
-    print(employee)
+    employee = runQuery('SELECT emp_id, name, rank_id, station_id, date_of_join FROM EMPLOYEE')
+    #print(employee)
+    station = runQuery("SELECT station_name FROM station")
+    rank_info = runQuery("SELECT rank_id FROM rank_info")
 
     if request.method == "POST":
         try:
+            emp_id = request.form["emp_id"]
+            name = request.form["Name"]
+            rank_id = request.form["RankType"]
+            station_name = request.form["Station"]
+            date_of_join = request.form["startdate"]
+            password = name+"123*"
 
-            Name = request.form["newEmployee"]
-            fee=request.form["Fee"]
-            participants = request.form["maxP"]
-            Type=request.form["EventType"]
-            Location = request.form["EventLocation"]
-            Date = request.form['Date']
-            runQuery("INSERT INTO events(event_title,event_price,participants,type_id,location_id,date) VALUES(\"{}\",{},{},{},{},\'{}\');".format(Name,fee,participants,Type, Location,Date))
-
+            station_id_list = runQuery("SELECT station_id FROM station WHERE station_name='{}'".format(station_name))
+            station_id = station_id_list[0][0]
+            runQuery("INSERT INTO Employee(emp_id, name, rank_id, station_id,date_of_join, password)VALUES('{}', '{}', '{}', '{}', '{}', '{}')".format(emp_id, name, rank_id, station_id,date_of_join, password))
         except:
-            EventId=request.form["EventId"]
-            runQuery("DELETE FROM events WHERE event_id={}".format(EventId))
+            print("Something went wrong oh no")
+        # except:
+        #     EventId=request.form["EventId"]
+        #     runQuery("DELETE FROM events WHERE event_id={}".format(EventId))
 
-    return render_template('events.html',events = events,eventTypes = eventTypes,types = types,locations = location) 
+    return render_template('employee.html', employee = employee, station = station, ranks = rank_info) 
 
 
 @app.route('/eventinfo')
@@ -122,7 +127,6 @@ def renderParticipants():
     return render_template('participants.html',events = events)
 
 def runQuery(query):
-
     try:
         db = mysql.connector.connect( host='localhost',database='police_station_db',user='RecordKeeper',password='Vertin')
 

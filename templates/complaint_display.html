@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Event Types</title>
+    <title>Complaints registered</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
@@ -28,37 +28,37 @@
     </div>
 
         <div style=" align-items: center; display: flex; justify-content: center;">
-            <h1>Employees</h1>
+            <h1>Registered Complaints</h1>
         </div>
         <table class="table">
             <thead class="thead-dark bg-dark text-light">
                 <tr>
-                    <th scope="col">Emp ID</th>
-                    <th scope="col">Emp Name</th>
-                    <th scope="col">Rank</th>
+                    <th scope="col">Comp ID</th>
                     <th scope="col">Station ID</th>
-                    <th scope="col">Start Date</th>
+                    <th scope="col">Date Filed
+                    </th>
+                    <th scope="col">Filed By</th>
+                    <th scope="col">Phone number</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Status</th>
                 </tr>
             </thead>
             <tbody>
-                {% for emp in employee %}
+                {% for c in complaints %}
                 <tr>
-                    <th scope="row">{{emp[0]}}</th>
-                    <td>{{emp[1]}}</td>
-                    <td>{{emp[2]}}</td>
-                    <td>{{emp[3]}}</td>
-                    <td>{{emp[4]}}</td>
+                    <th scope="row">{{c[0]}}</th>
+                    <td>{{c[1]}}</td>
+                    <td>{{c[2]}}</td>
+                    <td>{{c[3]}}</td>
+                    <td>{{c[4]}}</td>
+                    <td>{{c[5]}}</td>
+                    <td>{{c[6]}}</td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
 
         <div class="row" style="align-items: center;display: flex; justify-content: center;">
-            <div class="col-md-3" > 
-                <button id="addbtn" type="button" class="mb-5 btn btn-primary btn-lg" >
-                    + Add new employee
-                </button>
-            </div>
             <!--<div class="col-md-3">
                 <button id="updbtn" type="button" class="mb-5 btn btn-secondary btn-lg">
                     Update employee
@@ -66,7 +66,7 @@
             </div>-->
             <div class="col-md-6"id="deldiv" >
                 <button id="delbtn" type="button" class="mb-5 btn btn-danger btn-lg">
-                    Delete employee
+                    Update Status
                 </button>
             </div>
         </div>

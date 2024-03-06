@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student information Admin</title>
+    <title>Fine Information</title>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -32,12 +32,13 @@
                 <div class="form-group rounded" style="text-align:center;">
                     <label style="font-weight: bolder;margin-top:4%;margin-bottom:5%;;font-style:Trebuchet MS;color:antiquewhite" class="h2"
                         for="inlineFormCustomSelect">Get Fine Information </label>
-                    <select name="Event" class="form-control w-100 border border-dark">
-                        <option selected>Select Event</option>
-                        {% for event in events %}
-                        <option value="{{event[0]}}">{{event[1]}}</option>
+                    <input type="text" name="aadhar" class="form-control w-100 border border-dark" placeholder="Enter Aadhar Number" required>
+                    <!--<select name="fines" class="form-control w-100 border border-dark">
+                        <option selected>Select Fines</option>
+                        {% for f in fines %}
+                        <option value="{{f[0]}}">{{f[0]}}</option>
                         {% endfor %}
-                    </select>
+                    </select> -->
                 </div>
                 <div style="margin-top:3%;align-items: center;display:flex;justify-content:center;">
                     <button style="width:20%;margin-top:2%;margin-bottom:5%;align-items: center;display: flex; justify-content: center;font-weight:bolder;"
@@ -53,19 +54,21 @@
       <table class="table">
         <thead class="thead-dark bg-dark text-light">
             <tr>
-                <th scope="col"> Participant Id</th>
-                <th scope="col">Name</th>
-                <th scope="col">Contact</th>
-                <th scope="col">Email</th>
+                <th scope="col">Fine ID</th>
+                <th scope="col">Police ID</th>
+                <th scope="col">Aadhar</th>
+                <th scope="col">Matter</th>
+                <th scope="col">Fined Date</th>
             </tr>
         </thead>
         <tbody>
-            {% for par in participants %}
+            {% for f in fines %}
             <tr>
-                <th scope="row">{{par[0]}}</th>
-                <td>{{par[1]}}</td>
-                <td>{{par[2]}}</td>
-                <td>{{par[3]}}</td>
+                <th scope="row">{{f[0]}}</th>
+                <td>{{f[1]}}</td>
+                <td>{{f[2]}}</td>
+                <td>{{f[3]}}</td>
+                <td>{{f[4]}}</td>
             </tr>
             {% endfor %}
         </tbody>

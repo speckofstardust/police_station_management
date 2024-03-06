@@ -116,6 +116,36 @@ def displayEmployee():
 
     return render_template('employee.html', employee = employee, station = station, ranks = rank_info) 
 
+@app.route('/dashboard/fine', methods=['GET', 'POST', 'POST_DELETE', 'GET_EXTRACT'])
+def renderFine():
+    fines = runQuery("SELECT * FROM fine")
+
+    if request.method == 'POST':
+        fine_id = runQuery("SELECT MAX(fine_id) FROM fine")[0][0]+1
+        police_id = request.form['police_id']
+        aadhar_id = request.form['aadhar_id']
+        matter = request.form['matter']
+        fined_date = request.form['fined_date']
+
+        runQuery("INSERT INTO fine(fine_id, police_id, aadhar_id, matter, fined_date) VALUES('{}', '{}', '{}', '{}', '{}')".format(fine_id, police_id, aadhar_id, matter, fined_date))
+        return render_template('fine_display.html', fines = fines)
+    
+    if request.method == 'POST_DELETE':
+        fine_id = request.form['fine_id']
+        runQuery("DELETE FROM fine WHERE fine_id={}".format(fine_id))
+        return render_template('fine_display.html', fines = fines)
+    
+    if request.method == 'GET':
+        return render_template('fine_display.html', fines = fines)
+    
+    if request.method == 'GET_EXTRACT':
+        aadhar_id = request.form['aadhar_id']
+        extracted_fines = runQuery("SELECT * FROM fine WHERE aadhar_id='{}'".format(aadhar_id))
+        return render_template('fine_display.html', fines = extracted_fines)
+       
+    return render_template('fine_display.html')
+
+
 
 @app.route('/eventinfo')
 def rendereventinfo():

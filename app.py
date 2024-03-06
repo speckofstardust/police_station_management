@@ -70,6 +70,10 @@ def renderAdmin():
     return render_template('admin.html')    
 
 
+@app.route('/dashboard',methods=['GET'])
+def renderDashboard():
+    return render_template('dashboard.html')
+
 
 @app.route('/dashboard/complaint',methods=['GET','POST'])
 def displayComplaints():

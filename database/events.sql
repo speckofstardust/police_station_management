@@ -60,20 +60,20 @@ CREATE TABLE Complaint (
 	CONSTRAINT pk_comp PRIMARY KEY(comp_id),
 	CONSTRAINT fk_comp FOREIGN KEY(station_id) REFERENCES Station(station_id));
 
-CREATE TABLE 'Fine_Info' (
-	'matter' VARCHAR(20),
-	'payment' INTEGER,
-	CONSTRAINT 'fk_inf' PRIMARY KEY('matter'));
+CREATE TABLE Fine_Info (
+	matter VARCHAR(20),
+	payment INTEGER,
+	CONSTRAINT fk_inf PRIMARY KEY(matter));
 
-CREATE TABLE 'Fine' (
-	'fine_id' VARCHAR(5),
-	'police_id' VARCHAR(6),
-	'aadhar_id' NUMERIC(12, 0),
-	'matter' VARCHAR(20),
-	'fined_date' DATE,
-	CONSTRAINT 'pk_fine' PRIMARY KEY('fine_id'),
-	CONSTRAINT 'fk_fine' FOREIGN KEY('police_id') REFERENCES Employee('emp_id'),
-	CONSTRAINT 'fk_pay' FOREIGN KEY('matter') REFERENCES Fine_Info('matter'));
+CREATE TABLE Fine (
+	fine_id VARCHAR(5),
+	police_id VARCHAR(6),
+	aadhar_id NUMERIC(12, 0),
+	matter VARCHAR(20),
+	fined_date DATE,
+	CONSTRAINT pk_fine PRIMARY KEY(fine_id),
+	CONSTRAINT fk_fine FOREIGN KEY(police_id) REFERENCES Employee(emp_id),
+	CONSTRAINT fk_pay FOREIGN KEY(matter) REFERENCES Fine_Info(matter));
 
 INSERT INTO Station VALUES('A1415', 'Vijayanagar', 9428302313, 'Vijayanager, Bangalore');
 INSERT INTO Station VALUES('A1416', 'Kengeri', 9428302314, 'Kengeri, Bangalore');
@@ -113,6 +113,16 @@ INSERT INTO Complaint VALUES(002, 'A1416', '2022-01-02', 'Jane Smith', 942830231
 INSERT INTO Complaint VALUES(003, 'A1417', '2022-01-03', 'Mike Johnson', 9428302315, 'Assault', 'Pending');
 INSERT INTO Complaint VALUES(004, 'A1415', '2022-01-04', 'Emily Brown', 9428302313, 'Theft', 'Pending');
 
+INSERT INTO Fine_Info VALUES('Speeding', 500);
+INSERT INTO Fine_Info VALUES('Trespassing', 1500);
+INSERT INTO Fine_Info VALUES('Parking Violation', 1000);
+INSERT INTO Fine_Info VALUES('DUI', 1000);
+INSERT INTO Fine_Info VALUES('No Seatbelt', 500);
+INSERT INTO Fine_Info VALUES('Running a Red Light', 500);
+INSERT INTO Fine_Info VALUES('Possession of Drugs', 1000)
+INSERT INTO Fine_Info VALUES('Lying under Oath', 1250);
+
+INSERT INTO Fine VALUES
 -- --------------------------------------------------------------------------------------------------------
 
 

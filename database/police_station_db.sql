@@ -122,22 +122,19 @@ INSERT INTO Fine_Info VALUES('Running a Red Light', 500);
 INSERT INTO Fine_Info VALUES('Possession of Drugs', 1000)
 INSERT INTO Fine_Info VALUES('Lying under Oath', 1250);
 
-INSERT INTO Fine VALUES
+INSERT INTO Fine VALUES(1, 'U143', 123456789012, 'Speeding', '2022-01-01');
+INSERT INTO Fine VALUES(2, 'U144', 123456789013, 'Trespassing', '2022-01-02');
+INSERT INTO Fine VALUES(3, 'U145', 123456789014, 'Parking Violation', '2022-01-03');
+INSERT INTO Fine VALUES(4, 'U146', 123456789015, 'DUI', '2022-01-04');
+INSERT INTO Fine VALUES(5, 'U147', 123456789016, 'No Seatbelt', '2022-01-05');
+INSERT INTO Fine VALUES(6, 'U148', 123456789017, 'Running a Red Light', '2022-01-06');
+INSERT INTO Fine VALUES(7, 'U149', 123456789018, 'Possession of Drugs', '2022-01-07');
+INSERT INTO Fine VALUES(8, 'U143', 123456789019, 'Lying under Oath', '2022-01-08');
+INSERT INTO Fine VALUES(9, 'U144', 123456789020, 'Speeding', '2022-01-09');
+INSERT INTO Fine VALUES(10, 'U150', 123456789021, 'Trespassing', '2022-01-10');
 -- --------------------------------------------------------------------------------------------------------
 
 
 -- -----------------------------------------------------------------------------
-
-
-
-
-CREATE TABLE `admin`(
-  `username` varchar(100) NOT NULL,
-  `password` varchar(100) NOT NULL
-);
-
-INSERT INTO `admin` VALUES
-('Admin1','password1'),
-('Admin2','password2');
 
 ----------------------------------------------------------------------------------

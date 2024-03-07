@@ -140,7 +140,7 @@ def renderFine():
             runQuery("DELETE FROM fine WHERE fine_id={}".format(fine_id))
         else:
             return render_template('fine_display.html', fines = fines, message="Fine id not found")
-        return render_template('fine_display.html', fines = fines)
+        return render_template('fine_display.html', fines = fines, message="")
     
     if request.method == 'GET':
         return render_template('fine_display.html', fines = fines)
@@ -153,7 +153,7 @@ def renderFine():
             aid_lst.append(present_aid[i][0])
         if aadhar_id in aid_lst:
             extracted_fines = runQuery("SELECT * FROM fine WHERE aadhar_id='{}'".format(aadhar_id))
-            return render_template('fine_display.html', fines = extracted_fines)
+            return render_template('fine_display.html', fines = extracted_fines, message="")
         else:
             return render_template('fine_display.html', message = "Aadhar id not found")
        

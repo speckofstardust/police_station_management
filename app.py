@@ -116,10 +116,11 @@ def displayEmployee():
 
     return render_template('employee.html', employee = employee, station = station, ranks = rank_info) 
 
-@app.route('/dashboard/fine', methods=['GET', 'POST', 'POST_DELETE', 'GET_EXTRACT'])
+@app.route('/dashboard/fine', methods=['GET', 'POST', 'DELETE'])
 def renderFine():
     fines = runQuery("SELECT * FROM fine")
-    matter = runQuery("SELECT matter FROM fine")
+    matter = runQuery("SELECT matter FROM fine_info")
+    police_id = runQuery("SELECT emp_id FROM employee")
     if request.method == 'POST':
         fine_id = runQuery("SELECT MAX(fine_id) FROM fine")[0][0]+1
         police_id = request.form['police_id']
@@ -128,9 +129,9 @@ def renderFine():
         fined_date = request.form['fined_date']
 
         runQuery("INSERT INTO fine(fine_id, police_id, aadhar_id, matter, fined_date) VALUES('{}', '{}', '{}', '{}', '{}')".format(fine_id, police_id, aadhar_id, matter, fined_date))
-        return render_template('fine_display.html', fines = fines, matter = matter)
+        return render_template('fine_db.html', fines = fines, matter = matter, p_id = police_id)
     
-    if request.method == 'POST_DELETE':
+    if request.method == 'DELETE':
         fine_id = request.form['fine_id']
         present_fid = runQuery("Select fine_id from fine")
         fid_lst = ()
@@ -139,13 +140,14 @@ def renderFine():
         if fine_id in fid_lst:
             runQuery("DELETE FROM fine WHERE fine_id={}".format(fine_id))
         else:
-            return render_template('fine_display.html', fines = fines, message="Fine id not found")
-        return render_template('fine_display.html', fines = fines, message="")
+            return render_template('fine_db.html', fines = fines, message="Fine id not found")
+        return render_template('fine_db.html', fines = fines, matter = matter, p_id = police_id,message="")
     
     if request.method == 'GET':
-        return render_template('fine_display.html', fines = fines)
+        return render_template('fine_db.html', fines = fines,matter = matter, p_id = police_id)
     
-    if request.method == 'GET_EXTRACT':
+    #this stuff definitely needs to me modified
+    if request.method == 'GET':
         aadhar_id = request.form['aadhar_id']
         present_aid = runQuery("SELECT aadhar_id FROM fine")
         aid_lst = ()
@@ -153,11 +155,11 @@ def renderFine():
             aid_lst.append(present_aid[i][0])
         if aadhar_id in aid_lst:
             extracted_fines = runQuery("SELECT * FROM fine WHERE aadhar_id='{}'".format(aadhar_id))
-            return render_template('fine_display.html', fines = extracted_fines, message="")
+            return render_template('fine_db.html', fines = extracted_fines, message="")
         else:
-            return render_template('fine_display.html', message = "Aadhar id not found")
+            return render_template('fine_db.html', message = "Aadhar id not found")
        
-    return render_template('fine_display.html')
+    return render_template('fine_db.html', fines = fines, matter=matter, p_id = police_id)
 
 
 

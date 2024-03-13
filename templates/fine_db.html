@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Event Types</title>
+    <title>Fine Database</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
@@ -28,7 +28,7 @@
     </div>
 
         <div style=" align-items: center; display: flex; justify-content: center;">
-            <h1>Employees</h1>
+            <h1>Fines</h1>
         </div>
         <table class="table">
             <thead class="thead-dark bg-dark text-light">
@@ -69,7 +69,7 @@
         <div class="bg-dark text-dark "
             style="align-items:center; display: flex; justify-content: center;display: none;background-color: #f1faee;height:20%;border-radius:10px;"
             id="delevent">
-            <form method="post" style="width:45vw;min-height:20vw;">
+            <form method="DELETE" style="width:45vw;min-height:20vw;">
                 <div class="form-group rounded" style="text-align:center;">
                     <label style="margin-top:4%;margin-bottom:5%;;font-style:Trebuchet MS;color:antiquewhite" class="h2"
                         for="inlineFormCustomSelect">Delete Fine</label>
@@ -106,7 +106,7 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label class="h4" for="inlineFormCustomSelect">Police ID</label>
-                                                <select name="police"
+                                                <select name="police_id"
                                                     class="form-control w-100 border border-dark" id="Station">
                                                     <option selected>Select Police ID</option>
                                                     {% for p in p_id %}
@@ -116,7 +116,7 @@
                                             <br>
                                             <div class="form-group">
                                                 <label class="h4" for="inlineFormCustomSelect">Aadhar</label>
-                                                <input name="aadhar" type="text" class="form-control border border-dark"
+                                                <input name="aadhar_id" type="text" class="form-control border border-dark"
                                                     id="Fee" aria-describedby="Fee"
                                                     placeholder="Enter Aadhar ID">
                                                 <br />
@@ -130,7 +130,7 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label class="h4" for="inlineFormCustomSelect">Fined Date</label>
-                                            <input name="finedate" type="text" class="form-control border border-dark"
+                                            <input name="fined_date" type="text" class="form-control border border-dark"
                                                 id="startdate" aria-describedby="startdate"
                                                 placeholder="Enter date in YYYY-MM-DD">
                                             <br />

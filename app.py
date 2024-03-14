@@ -167,24 +167,15 @@ def getAadhar():
     return render_template('extract_fine.html')
 
 
+@app.route('/dashboard/fine_info', methods=['GET'])
+def renderFineInfo():
+    fine_info = runQuery("SELECT * FROM fine_info")
+    return render_template('fine_info.html', fine_info = fine_info)
 
-@app.route('/extract_fineee', methods=['GET','POST'])
-def extractFine():
-    #extracted_fines = runQuery("SELECT f.fine_id, f.aadhar_id, f.matter, f.fined_date, fi.payment FROM fine f, fine_info fi WHERE f.matter=fi.matter")
-    if request.method == 'GET':
-        aadhar_id = request.args.get("aaadhar")
-        print(aadhar_id)
-        if aadhar_id:
-            present_aid = runQuery("SELECT aadhar_id FROM fine")
-            aid_lst = ()
-            for i in range(0, len(present_aid)):
-                aid_lst.append(present_aid[i][0])
-            print(aid_lst)
-            if aadhar_id in aid_lst:
-                extracted_fines = runQuery("SELECT f.fine_id, f.aadhar_id, f.matter, f.fined_date, fi.payment FROM fine f, fine_info fi WHERE f.matter=fi.matter AND f.aadhar_id = '{}'".format(aadhar_id))
-                print(extracted_fines)
-                return render_template('extract_fine.html', fines = extracted_fines)
-    return render_template('extract_fine.html')
+@app.route('/dashboard/rank_info', methods=['GET'])
+def renderRankInfo():
+    rank_info = runQuery("SELECT * FROM rank_info")
+    return render_template('rank_info.html', rank_info = rank_info)
         
 @app.route('/eventinfo')
 def rendereventinfo():
@@ -192,18 +183,7 @@ def rendereventinfo():
 
     return render_template('events_info.html',events = events)
 
-@app.route('/participants',methods=['GET','POST'])
-def renderParticipants():
-    
-    events = runQuery("SELECT * FROM events;")
 
-    if request.method == "POST":
-        Event = request.form['Event']
-
-        participants = runQuery("SELECT p_id,fullname,mobile,email FROM participants WHERE event_id={}".format(Event))
-        return render_template('participants.html',events = events,participants=participants)
-
-    return render_template('participants.html',events = events)
 
 def runQuery(query):
     try:

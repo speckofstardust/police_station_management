@@ -133,7 +133,12 @@ INSERT INTO Fine VALUES(8, 'U143', 123456789019, 'Lying under Oath', '2022-01-08
 INSERT INTO Fine VALUES(9, 'U144', 123456789020, 'Speeding', '2022-01-09');
 INSERT INTO Fine VALUES(10, 'U150', 123456789021, 'Trespassing', '2022-01-10');
 -- --------------------------------------------------------------------------------------------------------
-
+ALTER TABLE child_table
+DROP FOREIGN KEY fk_constraint_name,
+ADD CONSTRAINT fk_constraint_name
+FOREIGN KEY (child_column)
+REFERENCES parent_table(parent_column)
+ON DELETE SET NULL;
 
 -- -----------------------------------------------------------------------------
 

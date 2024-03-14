@@ -141,5 +141,24 @@ REFERENCES parent_table(parent_column)
 ON DELETE SET NULL;
 
 -- -----------------------------------------------------------------------------
+DELIMITER //
+CREATE TRIGGER increment_no_of_officers
+AFTER INSERT ON employee
+FOR EACH ROW
+BEGIN
+    UPDATE rank_info
+    SET no_officers = no_officers + 1
+    WHERE rank_id = NEW.rank_id;
+END;
+//
+DELIMITER ;
+
+SELECT rank_id, COUNT(*) AS count_of_rank
+FROM employee
+GROUP BY rank_id;
+
+
+
+
 
 ----------------------------------------------------------------------------------

@@ -108,6 +108,7 @@ def displayEmployee():
             station_id_list = runQuery("SELECT station_id FROM station WHERE station_name='{}'".format(station_name))
             station_id = station_id_list[0][0]
             runQuery("INSERT INTO Employee(emp_id, name, rank_id, station_id,date_of_join, password)VALUES('{}', '{}', '{}', '{}', '{}', '{}')".format(emp_id, name, rank_id, station_id,date_of_join, password))
+
         except:
             Emp_id = request.form['Emp_Id']
             runQuery("DELETE FROM Employee WHERE emp_id='{}'".format(Emp_id))

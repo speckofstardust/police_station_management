@@ -69,13 +69,13 @@
         <div class="bg-dark text-dark "
             style="align-items:center; display: flex; justify-content: center;display: none;background-color: #f1faee;height:20%;border-radius:10px;"
             id="delevent">
-            <form method="DELETE" style="width:45vw;min-height:20vw;">
+            <form method="POST" style="width:45vw;min-height:20vw;">
                 <div class="form-group rounded" style="text-align:center;">
                     <label style="margin-top:4%;margin-bottom:5%;;font-style:Trebuchet MS;color:antiquewhite" class="h2"
                         for="inlineFormCustomSelect">Delete Fine</label>
-                    <select name="EventId" class="form-control w-100 border border-dark">
+                    <select name="fine_id" class="form-control w-100 border border-dark">
                         <option selected>Select Fine to Delete</option>
-                        {% for f in fine %}
+                        {% for f in fine_ids %}
                         <option value="{{f[0]}}">{{f[0]}}</option>
                         {% endfor %}
                     </select>
@@ -140,7 +140,7 @@
                                                     class="form-control w-100 border border-dark" id="Station">
                                                     <option selected>Select Matter</option>
                                                     {% for m in matter %}
-                                                    <option value={{m[0]}}>{{m[0]}}</option>
+                                                    <option value="{{m[0]}}">{{m[0]}}</option>
                                                     {% endfor %}
                                                 </select>
                                             </div>

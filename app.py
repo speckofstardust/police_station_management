@@ -119,50 +119,48 @@ def displayEmployee():
 @app.route('/dashboard/fine', methods=['GET', 'POST', 'DELETE'])
 def renderFine():
     fines = runQuery("SELECT * FROM fine")
-    matter = runQuery("SELECT matter FROM fine_info")
-    police_id = runQuery("SELECT emp_id FROM employee")
-    if request.method == 'POST':
-        fine_id = runQuery("SELECT MAX(fine_id) FROM fine")[0][0]+1
-        police_id = request.form['police_id']
-        aadhar_id = request.form['aadhar_id']
-        matter = request.form['matter']
-        fined_date = request.form['fined_date']
+    fine_ids = runQuery("SELECT fine_id FROM fine")
+    matters = runQuery("SELECT matter FROM fine_info")
+    police_ids = runQuery("SELECT emp_id FROM employee")
 
-        runQuery("INSERT INTO fine(fine_id, police_id, aadhar_id, matter, fined_date) VALUES('{}', '{}', '{}', '{}', '{}')".format(fine_id, police_id, aadhar_id, matter, fined_date))
-        return render_template('fine_db.html', fines = fines, matter = matter, p_id = police_id)
-    
-    if request.method == 'DELETE':
-        fine_id = request.form['fine_id']
-        present_fid = runQuery("Select fine_id from fine")
-        fid_lst = ()
-        for i in range(0, len(present_fid)):
-            fid_lst.append(present_fid[i][0])
-        if fine_id in fid_lst:
+    if request.method == 'POST':
+        try:
+            fine_id = runQuery("SELECT MAX(fine_id) FROM fine")[0][0]+1
+            police_id = request.form['police_id']
+            aadhar_id = request.form['aadhar_id']
+            matter = request.form['matter']
+            print(matter)
+            fined_date = request.form['fined_date']
+
+            runQuery("INSERT INTO fine(fine_id, police_id, aadhar_id, matter, fined_date) VALUES('{}', '{}', '{}', '{}', '{}')".format(fine_id, police_id, aadhar_id, matter, fined_date))
+            fine_ids = police_id = aadhar_id = matter = fined_date = ""
+            return render_template('fine_db.html', fine_ids = fine_ids, fines = fines, matter = matters, p_id = police_ids)
+        except:
+            fine_id = request.form['fine_id']
             runQuery("DELETE FROM fine WHERE fine_id={}".format(fine_id))
-        else:
-            return render_template('fine_db.html', fines = fines, message="Fine id not found")
-        return render_template('fine_db.html', fines = fines, matter = matter, p_id = police_id,message="")
+            return render_template('fine_db.html', fine_ids = fine_ids, fines = fines,matter = matters, p_id = police_ids)
     
     if request.method == 'GET':
-        return render_template('fine_db.html', fines = fines,matter = matter, p_id = police_id)
+        return render_template('fine_db.html', fine_ids = fine_ids, fines = fines,matter = matters, p_id = police_ids)
     
-    #this stuff definitely needs to me modified
-    if request.method == 'GET':
-        aadhar_id = request.form['aadhar_id']
+    return render_template('fine_db.html', fine_ids = fine_ids, fines = fines, matter=matters, p_id = police_ids)
+
+@app.route('/extract_fine', methods=['GET'])
+def extractFine():
+    extracted_fines = runQuery("SELECT f.fine_id, f.aadhar_id, f.matter, f.fined_date, fi.payment FROM fine f, fine_info fi WHERE f.matter=fi.matter")
+    aadhar_id = request.args.get('aadhar')
+    if aadhar_id:
         present_aid = runQuery("SELECT aadhar_id FROM fine")
         aid_lst = ()
         for i in range(0, len(present_aid)):
             aid_lst.append(present_aid[i][0])
+        print(aid_lst)
         if aadhar_id in aid_lst:
-            extracted_fines = runQuery("SELECT * FROM fine WHERE aadhar_id='{}'".format(aadhar_id))
-            return render_template('fine_db.html', fines = extracted_fines, message="")
-        else:
-            return render_template('fine_db.html', message = "Aadhar id not found")
-       
-    return render_template('fine_db.html', fines = fines, matter=matter, p_id = police_id)
-
-
-
+            extracted_fines = runQuery("SELECT f.fine_id, f.aadhar_id, f.matter, f.fined_date, fi.payment FROM fine f, fine_info fi WHERE f.matter=fi.matter AND f.aadhar_id = '{}'".format(aadhar_id))
+            print(extracted_fines)
+            return render_template('extract_fine.html', fines = extracted_fines)
+    return render_template('extract_fine.html', fines = extracted_fines)
+        
 @app.route('/eventinfo')
 def rendereventinfo():
     events=runQuery("SELECT *,(SELECT COUNT(*) FROM participants AS P WHERE P.event_id = E.event_id ) AS count FROM events AS E LEFT JOIN event_type USING(type_id) LEFT JOIN location USING(location_id);")

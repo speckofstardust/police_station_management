@@ -177,12 +177,18 @@ def renderFineInfo():
 def renderRankInfo():
     rank_info = runQuery("SELECT * FROM rank_info")
     return render_template('rank_info.html', rank_info = rank_info)
-        
-@app.route('/eventinfo')
-def rendereventinfo():
-    events=runQuery("SELECT *,(SELECT COUNT(*) FROM participants AS P WHERE P.event_id = E.event_id ) AS count FROM events AS E LEFT JOIN event_type USING(type_id) LEFT JOIN location USING(location_id);")
 
-    return render_template('events_info.html',events = events)
+@app.route('/dashboard/visitors', methods=['GET'])
+def renderVisitorLogs():
+    visitors = runQuery("SELECT * FROM visitor")
+    return render_template('visitors.html', visitors = visitors)
+
+@app.route('/dashboard/detained', methods=['GET'])
+def renderDetainedDb():
+    detained = runQuery("SELECT * FROM detained")
+    return render_template('detained.html', detained = detained)
+        
+
 
 
 

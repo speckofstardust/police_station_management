@@ -43,7 +43,7 @@ def submitComplaint():
     
     return render_template('complaint.html', station = station)
 
-@app.route('/home', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST'])
 def renderHome():
     return render_template('home.html')
 
@@ -109,10 +109,8 @@ def displayEmployee():
             station_id = station_id_list[0][0]
             runQuery("INSERT INTO Employee(emp_id, name, rank_id, station_id,date_of_join, password)VALUES('{}', '{}', '{}', '{}', '{}', '{}')".format(emp_id, name, rank_id, station_id,date_of_join, password))
         except:
-            print("Something went wrong oh no")
-        # except:
-        #     EventId=request.form["EventId"]
-        #     runQuery("DELETE FROM events WHERE event_id={}".format(EventId))
+            Emp_id = request.form['Emp_Id']
+            runQuery("DELETE FROM Employee WHERE emp_id='{}'".format(Emp_id))
 
     return render_template('employee.html', employee = employee, station = station, ranks = rank_info) 
 
@@ -145,21 +143,48 @@ def renderFine():
     
     return render_template('fine_db.html', fine_ids = fine_ids, fines = fines, matter=matters, p_id = police_ids)
 
-@app.route('/extract_fine', methods=['GET'])
-def extractFine():
-    extracted_fines = runQuery("SELECT f.fine_id, f.aadhar_id, f.matter, f.fined_date, fi.payment FROM fine f, fine_info fi WHERE f.matter=fi.matter")
-    aadhar_id = request.args.get('aadhar')
-    if aadhar_id:
-        present_aid = runQuery("SELECT aadhar_id FROM fine")
-        aid_lst = ()
+@app.route('/extract_finee', methods=['GET', 'POST'])
+def getAadhar():
+    if request.method == 'GET':
+        return render_template('extract_fine.html')
+    if request.method == 'POST':
+        aadhar_id = request.form['aaadhar']
+        #print(aadhar_id)
+        present_aid = runQuery("SELECT distinct aadhar_id FROM fine")
+        print(present_aid)
+        aid_lst = []
         for i in range(0, len(present_aid)):
-            aid_lst.append(present_aid[i][0])
-        print(aid_lst)
+            adr = str(present_aid[i][0])
+            if adr not in aid_lst:
+                aid_lst.append(adr)
         if aadhar_id in aid_lst:
-            extracted_fines = runQuery("SELECT f.fine_id, f.aadhar_id, f.matter, f.fined_date, fi.payment FROM fine f, fine_info fi WHERE f.matter=fi.matter AND f.aadhar_id = '{}'".format(aadhar_id))
-            print(extracted_fines)
-            return render_template('extract_fine.html', fines = extracted_fines)
-    return render_template('extract_fine.html', fines = extracted_fines)
+            fine_info = runQuery("SELECT f.fine_id, f.aadhar_id, f.matter, f.fined_date, fi.payment FROM fine f, fine_info fi WHERE f.matter=fi.matter AND f.aadhar_id = '{}'".format(aadhar_id))
+            print(fine_info)
+        else:
+            fine_info = [(None, aadhar_id, None,None, 0)]
+        aadhar_id = ""
+        return render_template('your_fines.html', finess = fine_info)
+    return render_template('extract_fine.html')
+
+
+
+@app.route('/extract_fineee', methods=['GET','POST'])
+def extractFine():
+    #extracted_fines = runQuery("SELECT f.fine_id, f.aadhar_id, f.matter, f.fined_date, fi.payment FROM fine f, fine_info fi WHERE f.matter=fi.matter")
+    if request.method == 'GET':
+        aadhar_id = request.args.get("aaadhar")
+        print(aadhar_id)
+        if aadhar_id:
+            present_aid = runQuery("SELECT aadhar_id FROM fine")
+            aid_lst = ()
+            for i in range(0, len(present_aid)):
+                aid_lst.append(present_aid[i][0])
+            print(aid_lst)
+            if aadhar_id in aid_lst:
+                extracted_fines = runQuery("SELECT f.fine_id, f.aadhar_id, f.matter, f.fined_date, fi.payment FROM fine f, fine_info fi WHERE f.matter=fi.matter AND f.aadhar_id = '{}'".format(aadhar_id))
+                print(extracted_fines)
+                return render_template('extract_fine.html', fines = extracted_fines)
+    return render_template('extract_fine.html')
         
 @app.route('/eventinfo')
 def rendereventinfo():

@@ -78,7 +78,7 @@
                 <div class="form-group rounded" style="text-align:center;">
                     <label style="margin-top:4%;margin-bottom:5%;;font-style:Trebuchet MS;color:antiquewhite" class="h2"
                         for="inlineFormCustomSelect">Delete Employee</label>
-                    <select name="EventId" class="form-control w-100 border border-dark">
+                    <select name="Emp_Id" class="form-control w-100 border border-dark">
                         <option selected>Select Employee to Delete</option>
                         {% for emp in employee %}
                         <option value="{{emp[0]}}">{{emp[1]}}</option>
@@ -128,7 +128,7 @@
                                                     id="RankType">
                                                     <option selected>Select Rank</option>
                                                     {% for rank_id in ranks%}
-                                                    <option value={{rank_id[0]}}>{{rank_id[0]}}</option>
+                                                    <option value="{{rank_id[0]}}">{{rank_id[0]}}</option>
                                                     {% endfor %}
                                                 </select>
                                             </div>

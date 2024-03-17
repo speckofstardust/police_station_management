@@ -1,53 +1,58 @@
 USE police_station_db;
 
 CREATE TABLE Station (
-	'station_id' VARCHAR(5),
-	'station_name' VARCHAR(15),
-	'phone_no' NUMERIC(10, 0),
-	'address' VARCHAR(30),
-	CONSTRAINT 'pk_stn' PRIMARY KEY('station_id'));
-
-CREATE TABLE 'Rank_Info' (
-	'rank' VARCHAR(20),
-	'salary' INTEGER,
-	'no_officers' INTEGER,
-	'min_exp' INTEGER,
-	'contrib_pts' INTEGER,
-	CONSTRAINT 'pk_rank' PRIMARY KEY('rank'));
-
-CREATE TABLE 'Employee' (
-	'emp_id' VARCHAR(6),
-	'name' VARCHAR(15),
-	'rank' VARCHAR(20),
-	'station_id' VARCHAR(5),
-	'date_of_join' DATE,
-	'password' VARCHAR(20),
-	CONSTRAINT 'pk_emp' PRIMARY KEY('emp_id'),
-	CONSTRAINT 'fk_emp' FOREIGN KEY('station_id') REFERENCES Station('station_id'),
-	CONSTRAINT 'fk_emprank' FOREIGN KEY('rank') REFERENCES Rank_Info('rank'));
-
-CREATE TABLE 'Detained' (
-	'd_id' VARCHAR(5),
-	'emp_id' VARCHAR(6),
-	'name' VARCHAR(20),
-	'station_id' VARCHAR(5),
-	'descpt' VARCHAR(50),
-	'date_in' DATE,
-	CONSTRAINT 'pk_det' PRIMARY KEY('d_id'),
-	CONSTRAINT 'fk_det' FOREIGN KEY('station_id') REFERENCES Station('station_id')
-	CONSTRAINT 'fk_detemp' FOREIGN KEY('emp_id') REFERENCES Employee('emp_id')
+    station_id VARCHAR(5),
+    station_name VARCHAR(15),
+    phone_no NUMERIC(10, 0),
+    address VARCHAR(30),
+    CONSTRAINT pk_stn PRIMARY KEY(station_id)
 );
 
-CREATE TABLE 'Visitor' (
-	'vis_id' VARCHAR(5),
-	'name' VARCHAR(20),
-	'station_id' VARCHAR(5),
-	'purpose' VARCHAR(40),
-	'entry_date' DATE,
-	'time_in' TIME,
-	'time_out' TIME,
-	CONSTRAINT 'pk_vis' PRIMARY KEY('vis_id'),
-	CONSTRAINT 'fk_vis' FOREIGN KEY('station_id') REFERENCES Station('station_id'));
+CREATE TABLE Rank_Info (
+    rank_id VARCHAR(20),
+    salary INTEGER,
+    no_officers INTEGER,
+    min_exp INTEGER,
+    contrib_pts INTEGER,
+    CONSTRAINT pk_rank PRIMARY KEY(rank_id)
+);
+
+CREATE TABLE Employee (
+    emp_id VARCHAR(6),
+    name VARCHAR(15),
+    rank VARCHAR(20),
+    station_id VARCHAR(5),
+    date_of_join DATE,
+    password VARCHAR(20),
+    CONSTRAINT pk_emp PRIMARY KEY(emp_id),
+    CONSTRAINT fk_emp FOREIGN KEY(station_id) REFERENCES Station(station_id) ON DELETE SET NULL,
+    CONSTRAINT fk_emprank FOREIGN KEY(rank) REFERENCES Rank_Info(rank_id) ON DELETE SET NULL
+);
+
+CREATE TABLE Detained (
+    d_id VARCHAR(5),
+    emp_id VARCHAR(6),
+    name VARCHAR(20),
+    station_id VARCHAR(5),
+    descpt VARCHAR(50),
+    date_in DATE,
+    CONSTRAINT pk_det PRIMARY KEY(d_id),
+    CONSTRAINT fk_det FOREIGN KEY(station_id) REFERENCES Station(station_id) ON DELETE SET NULL,
+    CONSTRAINT fk_detemp FOREIGN KEY(emp_id) REFERENCES Employee(emp_id)
+);
+
+
+CREATE TABLE Visitor (
+    vis_id VARCHAR(5),
+    name VARCHAR(20),
+    station_id VARCHAR(5),
+    purpose VARCHAR(40),
+    entry_date DATE,
+    time_in TIME,
+    time_out TIME,
+    CONSTRAINT pk_vis PRIMARY KEY(vis_id),
+    CONSTRAINT fk_vis FOREIGN KEY(station_id) REFERENCES Station(station_id) ON DELETE SET NULL
+);
 
 CREATE TABLE Complaint (
 	comp_id INTEGER,
@@ -58,7 +63,7 @@ CREATE TABLE Complaint (
 	descpt VARCHAR(50),
 	status VARCHAR(9),
 	CONSTRAINT pk_comp PRIMARY KEY(comp_id),
-	CONSTRAINT fk_comp FOREIGN KEY(station_id) REFERENCES Station(station_id));
+	CONSTRAINT fk_comp FOREIGN KEY(station_id) REFERENCES Station(station_id) ON DELETE SET NULL);
 
 CREATE TABLE Fine_Info (
 	matter VARCHAR(20),
@@ -86,21 +91,21 @@ INSERT INTO Rank_Info VALUES('Constable', 20000, 20, 4, 4);
 INSERT INTO Rank_Info VALUES('Head Constable', 25000, 15, 5, 5);
 
 
-INSERT INTO Employee VALUES('U143', 'Ajit', 'Circle Inspector', 'A1415', '20-Feb-2010', 'arkh123*');
-INSERT INTO Employee VALUES('U144', 'John', 'Inspector', 'A1416', '15-Mar-2012', 'john123*');
-INSERT INTO Employee VALUES('U145', 'Lisa', 'Sub-Inspector', 'A1415', '10-Jul-2015', 'lisa456*');
-INSERT INTO Employee VALUES('U146', 'David', 'Constable', 'A1417', '05-Nov-2018', 'david789*'); 
-INSERT INTO Employee VALUES('U147', 'Emma', 'Constable', 'A1416', '12-Jan-2020', 'emma123*'); 
-INSERT INTO Employee VALUES('U148', 'Michael', 'Head Constable', 'A1415', '25-Sep-2016', 'michael456*'); 
-INSERT INTO Employee VALUES('U149', 'Sophia', 'Sub-Inspector', 'A1415', '18-Apr-2014', 'sophia789*');
+INSERT INTO Employee VALUES('U143', 'Ajit', 'Circle Inspector', 'A1415', '2010-02-20', 'arkh123*');
+INSERT INTO Employee VALUES('U144', 'John', 'Inspector', 'A1416', '2012-03-15', 'john123*');
+INSERT INTO Employee VALUES('U145', 'Lisa', 'Sub-Inspector', 'A1415', '2015-07-10', 'lisa456*');
+INSERT INTO Employee VALUES('U146', 'David', 'Constable', 'A1417', '2018-11-05', 'david789*'); 
+INSERT INTO Employee VALUES('U147', 'Emma', 'Constable', 'A1416', '2020-01-12', 'emma123*'); 
+INSERT INTO Employee VALUES('U148', 'Michael', 'Head Constable', 'A1415', '2016-09-25', 'michael456*'); 
+INSERT INTO Employee VALUES('U149', 'Sophia', 'Sub-Inspector', 'A1415', '2014-04-18', 'sophia789*');
 
-INSERT INTO Detained VALUES('D001', 'U143', 'Kamal', 'A1415', 'Theft', '20-Feb-2010');
-INSERT INTO Detained VALUES('D002', 'U144', 'Rahul', 'A1416', 'Murder', '13-Jan 2013');
-INSERT INTO Detained VALUES('D003', 'U145', 'Ravi', 'A1415', 'Robbery', '05-Jul-2019'); 
-INSERT INTO Detained VALUES('D004', 'U146', 'Sara', 'A1417', 'Assault', '10-Oct-2020'); 
-INSERT INTO Detained VALUES('D005', 'U147', 'Alex', 'A1416', 'Drug Possession', '15-Feb-2021'); 
-INSERT INTO Detained VALUES('D006', 'U148', 'Olivia', 'A1415', 'Fraud', '20-May-2017'); 
-INSERT INTO Detained VALUES('D007', 'U149', 'Daniel', 'A1415', 'Burglary', '25-Sep-2018');
+INSERT INTO Detained VALUES('D001', 'U143', 'Kamal', 'A1415', 'Theft', '2010-02-20');
+INSERT INTO Detained VALUES('D002', 'U144', 'Rahul', 'A1416', 'Murder', '2013-01-13');
+INSERT INTO Detained VALUES('D003', 'U145', 'Ravi', 'A1415', 'Robbery', '2019-07-05'); 
+INSERT INTO Detained VALUES('D004', 'U146', 'Sara', 'A1417', 'Assault', '2020-10-10'); 
+INSERT INTO Detained VALUES('D005', 'U147', 'Alex', 'A1416', 'Drug Possession', '2021-02-15'); 
+INSERT INTO Detained VALUES('D006', 'U148', 'Olivia', 'A1415', 'Fraud', '2017-05-20'); 
+INSERT INTO Detained VALUES('D007', 'U149', 'Daniel', 'A1415', 'Burglary', '2018-09-25');
 
 INSERT INTO Visitor VALUES('V001', 'John Doe', 'A1415', 'Meeting', '2022-01-01', '09:00:00', '10:00:00'); 
 INSERT INTO Visitor VALUES('V002', 'Jane Smith', 'A1416', 'Delivery', '2022-01-02', '14:30:00', '15:30:00'); 
@@ -139,8 +144,8 @@ ADD CONSTRAINT fk_constraint_name
 FOREIGN KEY (child_column)
 REFERENCES parent_table(parent_column)
 ON DELETE SET NULL;
-
 -- -----------------------------------------------------------------------------
+-- trigger to update the number of officers in the rank_info table
 DELIMITER //
 CREATE TRIGGER increment_no_of_officers
 AFTER INSERT ON employee
@@ -153,12 +158,22 @@ END;
 //
 DELIMITER ;
 
-SELECT rank_id, COUNT(*) AS count_of_rank
-FROM employee
-GROUP BY rank_id;
+-- Stored procedure to insert values into the Fine table
+DELIMITER //
 
+CREATE PROCEDURE InsertIntoFine(
+    IN fine_id_param INT,
+    IN emp_id_param VARCHAR(6),
+    IN fine_amount_param DECIMAL(10, 2),
+    IN fine_date_param DATE,
+    IN fine_reason_param VARCHAR(100)
+)
+BEGIN
+    INSERT INTO Fine(fine_id, emp_id, fine_amount, fine_date, fine_reason)
+    VALUES(fine_id_param, emp_id_param, fine_amount_param, fine_date_param, fine_reason_param);
+END //
 
-
+DELIMITER ;
 
 
 ----------------------------------------------------------------------------------
